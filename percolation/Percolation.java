@@ -3,7 +3,10 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
 
 	private int N;
-	private int O;
+	/** Number of the group for full sites */
+	private int F;
+	/** Number of the group for sites on the last row */
+	private int L;
 	private WeightedQuickUnionUF uf;
 	private boolean[] opened;
 	private int openedCount = 0;
@@ -13,10 +16,11 @@ public class Percolation {
 		if (n <= 0)
 			throw new IllegalArgumentException();
 		N = n;
-		O = N * N;
-		opened = new boolean[O];
+		F = N * N;
+		L = F + 1;
+		opened = new boolean[F];
 		// N - full sites
-		uf = new WeightedQuickUnionUF(O + 1);
+		uf = new WeightedQuickUnionUF(N * N + 2);
 	}
 
 	// opens the site (row, col) if it is not open already
@@ -29,7 +33,10 @@ public class Percolation {
 		opened[p] = true;
 		openedCount++;
 		if (row == 1)
-			uf.union(O, p);
+			uf.union(F, p);
+
+		if (row == N)
+			uf.union(L, p);
 
 		for (int n : neighbors(row, col)) {
 			if (opened[n])
@@ -47,7 +54,7 @@ public class Percolation {
 	public boolean isFull(int row, int col) {
 		int p = p(row, col);
 		if (opened[p])
-			return uf.find(O) == uf.find(p);
+			return uf.find(F) == uf.find(p);
 		else
 			return false;
 	}
@@ -59,12 +66,7 @@ public class Percolation {
 
 	// does the system percolate?
 	public boolean percolates() {
-		int o = uf.find(O);
-		for (int i = N * (N - 1); i < O; i++) {
-			if (opened[i] && uf.find(i) == o)
-				return true;
-		}
-		return false;
+		return uf.find(F) == uf.find(L);
 	}
 
 	private int p(int row, int col) {
