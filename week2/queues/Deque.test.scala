@@ -6,7 +6,7 @@ class DequeTest extends AnyFreeSpec with Matchers {
 
   "Throw" - {
     val d = new Deque[String]()
-    "IllegalArgumentException if the client calls" - {
+    "IllegalArgumentException if the client passes the null to" - {
       "addFirst" in
         assertThrows[IllegalArgumentException] {
           d.addFirst(null)
