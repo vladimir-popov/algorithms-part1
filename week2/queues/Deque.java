@@ -1,6 +1,9 @@
-import java.util.*;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class Deque<Item> implements Iterable<Item> {
+	public static void main(String[] args) {
+	}
 
 	private class Node {
 		public Item item;
