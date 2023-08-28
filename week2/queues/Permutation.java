@@ -9,10 +9,11 @@ public class Permutation {
 		RandomizedQueue<String> q = new RandomizedQueue<>();
 		while (!StdIn.isEmpty()) {
 			String line = StdIn.readString();
-			if (q.size() < k || StdRandom.bernoulli()) {
+			if (q.size() < k) {
 				q.enqueue(line);
-				if (q.size() > k)
-					q.dequeue();
+			} else if (StdRandom.bernoulli()) {
+				q.dequeue();
+				q.enqueue(line);
 			}
 		}
 		for (String str : q) {

@@ -98,6 +98,14 @@ class DequeTest extends AnyFreeSpec with Matchers {
 
       d.asScala.toSeq shouldBe r.asScala.toSeq
     }
+  }
+  "Removing elements" - {
+    "removeFirst should remove a single element" in {
+      val d = new Deque[Int]()
+      d.addFirst(1)
+      d.removeFirst()
+      d.isEmpty() shouldBe true
+    }
     "removeFirst should remove the last added element" in {
       val d = new Deque[Int]()
       d.addFirst(1)
@@ -105,6 +113,12 @@ class DequeTest extends AnyFreeSpec with Matchers {
       d.addFirst(3)
       d.removeFirst()
       d.asScala.toSeq shouldBe Seq(2, 1)
+    }
+    "removeLast should remove a single element" in {
+      val d = new Deque[Int]()
+      d.addFirst(1)
+      d.removeLast()
+      d.isEmpty() shouldBe true
     }
     "removeLast should remove the first added element" in {
       val d = new Deque[Int]()
