@@ -6,12 +6,13 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 	public static void main(String[] args) {
 	}
 
+	private static final int MIN_CAPACITY = 10;
 	private Item[] items;
 	private int count = 0;
 
 	// construct an empty randomized queue
 	public RandomizedQueue() {
-		this.items = (Item[]) new Object[10];
+		this.items = (Item[]) new Object[MIN_CAPACITY];
 	}
 
 	// is the randomized queue empty?
@@ -42,7 +43,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 		Item item = items[i];
 		items[i] = items[--count];
 		items[count] = null;
-		compress();
+		if (2 * count < items.length) {
+			compress();
+		}
 		return item;
 	}
 
@@ -75,13 +78,15 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 	}
 
 	private void compress() {
-		if (2 * count < items.length) {
-			Item[] newItems = (Item[]) new Object[3 * items.length / 4];
+		int newSize = 3 * items.length / 4;
+		if (newSize > MIN_CAPACITY) {
+			Item[] newItems = (Item[]) new Object[newSize];
 			for (int i = 0; i < count; i++) {
 				newItems[i] = items[i];
 			}
 			items = newItems;
 		}
+
 	}
 
 	private int randomIndex() {
