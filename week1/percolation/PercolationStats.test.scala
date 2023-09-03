@@ -1,11 +1,12 @@
+import edu.princeton.cs.algs4.StdRandom
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
-import edu.princeton.cs.algs4.StdRandom;
+
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
-import scala.util.Using
-import scala.util.Try
 import scala.util.Success
+import scala.util.Try
+import scala.util.Using
 
 class PercolationStatsTest extends AnyFreeSpec with Matchers {
 
@@ -35,14 +36,18 @@ class PercolationStatsTest extends AnyFreeSpec with Matchers {
       }
 
       println("Measure trails for 50x50:")
-      Range(1, 1001, 50).map(x => x -> measure(new PercolationStats(50, x))).foreach {
-        case (count, time) => println(s"$count, $time")
-      }
+      Range(1, 1001, 50)
+        .map(x => x -> measure(new PercolationStats(50, x)))
+        .foreach { case (count, time) =>
+          println(s"$count, $time")
+        }
 
       println("\nMeasure Ns with 100 trials:")
-      Range(1, 301, 30).map(x => x -> measure(new PercolationStats(x, 100))).foreach {
-        case (count, time) => println(s"$count, $time")
-      }
+      Range(1, 301, 30)
+        .map(x => x -> measure(new PercolationStats(x, 100)))
+        .foreach { case (count, time) =>
+          println(s"$count, $time")
+        }
     }
   }
 
@@ -73,9 +78,9 @@ class PercolationStatsTest extends AnyFreeSpec with Matchers {
         "95% confidence interval = \\[0\\.\\d+, 0\\.\\d+\\]".r
       )
       StdRandom.setSeed(100500L)
-      val Success(output) = sysOutToStr {
+      val output = sysOutToStr {
         PercolationStats.main(Array("100", "200"))
-      }
+      }.get
       val lines = output.linesIterator
       withClue(output) {
         lines should have size 3

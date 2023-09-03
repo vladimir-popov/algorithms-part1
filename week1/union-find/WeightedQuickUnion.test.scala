@@ -1,4 +1,3 @@
-//> using test.dep org.scalatest::scalatest::3.2.16
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
@@ -18,5 +17,5 @@ class WeightedQuickUnionTest extends AnyFreeSpec with Matchers with TableDrivenP
   }
 
   private def group(xs: Int*): Array[Integer] =
-    xs.toArray.map(new Integer(_))
+    xs.toArray.map(Integer.valueOf)
 }
