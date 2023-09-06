@@ -5,8 +5,8 @@ import edu.princeton.cs.algs4.StdDraw;
 
 public class Point implements Comparable<Point> {
 
-	private final int x;
-	private final int y;
+	public final int x;
+	public final int y;
 
 	/** constructs the point (x, y) */
 	public Point(int x, int y) {
@@ -26,7 +26,7 @@ public class Point implements Comparable<Point> {
 
 	/* string representation */
 	public String toString() {
-		return "Point(" + x + ", " + y + ")";
+		return "(" + x + ", " + y + ")";
 	}
 
 	/* compare two points by y-coordinates, breaking ties by x-coordinates */

@@ -3,12 +3,12 @@ import org.scalacheck.Gen
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.prop.TableDrivenPropertyChecks
+import org.scalatest.prop.TableFor1
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-import java.util.Comparator
 import java.lang.Integer
+import java.util.Comparator
 import scala.util.Random
-import org.scalatest.prop.TableFor1
 
 class MergeSortTest
     extends AnyFreeSpec
