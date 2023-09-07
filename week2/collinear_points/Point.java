@@ -51,11 +51,18 @@ public class Point implements Comparable<Point> {
 
 	/* compare two points by slopes they make with this point */
 	public Comparator<Point> slopeOrder() {
-		Point p0 = this;
-		return new Comparator<Point>() {
-			public int compare(Point p1, Point p2) {
-				return Double.compare(p0.slopeTo(p1), p0.slopeTo(p2));
-			}
-		};
+		return new PointComparator(this);
+	}
+
+	private class PointComparator implements Comparator<Point> {
+		private Point p0;
+
+		public PointComparator(Point p0) {
+			this.p0 = p0;
+		}
+
+		public int compare(Point p1, Point p2) {
+			return Double.compare(p0.slopeTo(p1), p0.slopeTo(p2));
+		}
 	}
 }

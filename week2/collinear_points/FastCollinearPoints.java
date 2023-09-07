@@ -1,5 +1,4 @@
 import java.util.Arrays;
-import java.util.Comparator;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdIn;
@@ -21,13 +20,20 @@ public class FastCollinearPoints {
 		// uniq indexes of points in the found line segments sorted by points
 		vertex = new int[points.length];
 
-		class Tuple {
+		class Tuple implements Comparable<Tuple> {
 			public int idx;
 			public double slope;
 
 			public Tuple(int idx, double slope) {
 				this.idx = idx;
 				this.slope = slope;
+			}
+
+			public int compareTo(Tuple other) {
+				if (Double.compare(this.slope, other.slope) == 0)
+					return this.p().compareTo(other.p());
+				else
+					return Double.compare(this.slope, other.slope);
 			}
 
 			public Point p() {
@@ -38,15 +44,6 @@ public class FastCollinearPoints {
 				return p().toString() + slope;
 			}
 		}
-
-		Comparator<Tuple> cp = new Comparator<Tuple>() {
-			public int compare(Tuple x, Tuple y) {
-				if (x.slope == y.slope)
-					return x.p().compareTo(y.p());
-				else
-					return Double.compare(x.slope, y.slope);
-			}
-		};
 
 		for (int i = 0; i < points.length; i++) {
 			if (points[i] == null)
@@ -59,7 +56,7 @@ public class FastCollinearPoints {
 
 				tuples[j - i - 1] = new Tuple(j, points[i].slopeTo(points[j]));
 			}
-			Arrays.sort(tuples, cp);
+			Arrays.sort(tuples);
 
 			int s = 0;
 			int e = 0;
@@ -78,7 +75,6 @@ public class FastCollinearPoints {
 				}
 			}
 		}
-		this.segments = Arrays.copyOf(this.segments, segmentsCount);
 	}
 
 	private int min(Point[] points, int idx1, int idx2) {
@@ -118,7 +114,7 @@ public class FastCollinearPoints {
 		if (ratio < 0) {
 			return useVertgex(points, idx, 0, middle);
 		} else {
-			return useVertgex(points, idx, middle, length - middle);
+			return useVertgex(points, idx, middle, (lo + length) - middle);
 		}
 	}
 
@@ -129,7 +125,7 @@ public class FastCollinearPoints {
 
 	/** the line segments */
 	public LineSegment[] segments() {
-		return segments;
+		return Arrays.copyOf(this.segments, segmentsCount);
 	}
 
 	public static void main(String[] args) {

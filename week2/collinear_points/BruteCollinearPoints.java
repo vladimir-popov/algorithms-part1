@@ -1,9 +1,6 @@
-import java.util.Comparator;
 import java.util.Arrays;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
-import edu.princeton.cs.algs4.StdIn;
-import edu.princeton.cs.algs4.StdOut;
 
 public class BruteCollinearPoints {
 
@@ -18,7 +15,7 @@ public class BruteCollinearPoints {
 			if (points[i] == null)
 				throw new IllegalArgumentException();
 
-		LineSegment[] segments = new LineSegment[points.length];
+		segments = new LineSegment[points.length];
 
 		for (int i = 0; i < points.length; i++) {
 			for (int j = i + 1; j < points.length; j++) {
@@ -40,8 +37,6 @@ public class BruteCollinearPoints {
 				}
 			}
 		}
-
-		this.segments = Arrays.copyOf(segments, segmentsCount);
 	}
 
 	/* the number of line segments */
@@ -51,7 +46,7 @@ public class BruteCollinearPoints {
 
 	/* the line segments */
 	public LineSegment[] segments() {
-		return segments;
+		return Arrays.copyOf(segments, segmentsCount);
 	}
 
 	public static void main(String[] args) {
