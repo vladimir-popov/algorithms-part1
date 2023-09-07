@@ -149,10 +149,10 @@ public class FastCollinearPoints {
 		// draw the points
 		StdDraw.enableDoubleBuffering();
 		int i = 0;
-		for (Point p : points) {
-			StdDraw.point(p.x * 0.1, p.y * 0.1);
-			StdDraw.text(p.x * 0.1, (p.y + 1) * 0.1, p.toString() + i++);
-		}
+		// for (Point p : points) {
+		// StdDraw.point(p.x * 0.1, p.y * 0.1);
+		// StdDraw.text(p.x * 0.1, (p.y + 1) * 0.1, p.toString() + i++);
+		// }
 		StdDraw.show();
 
 		FastCollinearPoints collinear = new FastCollinearPoints(points);

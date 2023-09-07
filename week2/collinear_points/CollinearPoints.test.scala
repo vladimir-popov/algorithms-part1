@@ -21,7 +21,7 @@ class CollinearPointsTest extends AnyFreeSpec with Matchers {
     def segments(): Array[LineSegment]
   }
 
-  "BruteCollinearPoints" ignore testCollinearPoints(points =>
+  "BruteCollinearPoints" - testCollinearPoints(points =>
     new BruteCollinearPoints(points) with CollinearPoints
   )
 
@@ -57,7 +57,7 @@ class CollinearPointsTest extends AnyFreeSpec with Matchers {
     }
 
     "Test cases" - {
-      "test case 1" in {
+      "simple case" in {
         val points = Array(
           new Point(2, 1),
           new Point(3, 3),
@@ -75,31 +75,32 @@ class CollinearPointsTest extends AnyFreeSpec with Matchers {
         cp.numberOfSegments() shouldBe 1
       }
 
-      "test case 2 (shuffled points)" in {
-        val seed = Random.nextLong()
-        val points = new Random(seed).shuffle(
-          List(
-            new Point(2, 1),
-            new Point(3, 3),
-            new Point(1, 4),
-            new Point(5, 2),
-            new Point(7, 1)
+      "shuffled points" in {
+        (0 to 10).foreach { _ =>
+          val seed = Random.nextLong()
+          val points = new Random(seed).shuffle(
+            List(
+              new Point(2, 1),
+              new Point(3, 3),
+              new Point(1, 4),
+              new Point(5, 2),
+              new Point(7, 1)
+            )
           )
-        )
-        val expectedSegments = Array(
-          new LineSegment(new Point(1, 4), new Point(7, 1))
-        )
+          val expectedSegments = Array(
+            new LineSegment(new Point(1, 4), new Point(7, 1))
+          )
 
-        val cp = collinearPoints(points.toArray);
+          val cp = collinearPoints(points.toArray);
 
-        withClue(s"Seed: $seed\n" + points.mkString("\n") + "\n") {
-          cp.segments() should contain theSameElementsAs (expectedSegments)
-          cp.numberOfSegments() shouldBe 1
+          withClue(s"Seed: $seed\n" + points.mkString("\n") + "\n") {
+            cp.segments() should contain theSameElementsAs (expectedSegments)
+            cp.numberOfSegments() shouldBe 1
+          }
         }
       }
 
-      // TODO: add case with triangle
-      "test case 3 (triangle)" in {
+      "triangle" in {
         val points = Array(
           new Point(4, 7),
           new Point(1, 1),
@@ -123,7 +124,7 @@ class CollinearPointsTest extends AnyFreeSpec with Matchers {
         cp.numberOfSegments() shouldBe 3
       }
 
-      "test case input 6" in {
+      "input 6" in {
         val points = Array(
           new Point(19000, 10000),
           new Point(18000, 10000),
@@ -138,10 +139,13 @@ class CollinearPointsTest extends AnyFreeSpec with Matchers {
 
         val cp = collinearPoints(points);
 
-        cp.segments() should contain theSameElementsAs (expectedSegments)
-        cp.numberOfSegments() shouldBe 1
+        // only 4 collinear points maybe detected in bruteforce implementation
+        if (!cp.isInstanceOf[BruteCollinearPoints]) {
+          cp.segments() should contain theSameElementsAs (expectedSegments)
+          cp.numberOfSegments() shouldBe 1
+        }
       }
-      "test case input 8" in {
+      "input 8" in {
         val points = Array(
           new Point(10000, 0),
           new Point(0, 10000),

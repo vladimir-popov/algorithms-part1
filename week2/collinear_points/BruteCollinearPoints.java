@@ -33,19 +33,15 @@ public class BruteCollinearPoints {
 						double sk = points[l].slopeTo(points[k]);
 						if (sl != sk)
 							continue;
-						segments[segmentsCount++] = new LineSegment(points[i], points[k]);
+						Point[] ps = { points[i], points[j], points[l], points[k] };
+						Arrays.sort(ps);
+						segments[segmentsCount++] = new LineSegment(ps[0], ps[3]);
 					}
 				}
 			}
 		}
 
 		this.segments = Arrays.copyOf(segments, segmentsCount);
-	}
-
-	// xs - sorted array of 4
-	private boolean isCollinear(Point[] xs) {
-		Comparator<Point> cp = xs[0].slopeOrder();
-		return (cp.compare(xs[1], xs[2]) + cp.compare(xs[2], xs[3])) == 0;
 	}
 
 	/* the number of line segments */
@@ -74,21 +70,12 @@ public class BruteCollinearPoints {
 
 		// draw the points
 		StdDraw.enableDoubleBuffering();
-		// StdDraw.setXscale(0, 32768);
-		// StdDraw.setYscale(0, 32768);
+		StdDraw.setXscale(0, 32768);
+		StdDraw.setYscale(0, 32768);
 		int i = 0;
 		for (Point p : points) {
-			StdDraw.point(p.x * 0.1, p.y * 0.1);
-			StdDraw.text(p.x * 0.1, (p.y + 1) * 0.1, p.toString() + i++);
+			p.draw();
 		}
 		StdDraw.show();
-
-		// print and draw the line segments
-		// BruteCollinearPoints collinear = new BruteCollinearPoints(points);
-		// for (LineSegment segment : collinear.segments()) {
-		// StdOut.println(segment);
-		// segment.draw();
-		// }
-		// StdDraw.show();
 	}
 }
