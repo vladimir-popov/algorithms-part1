@@ -1,10 +1,21 @@
 import java.util.Comparator;
+import java.util.Arrays;
 
 public class BinaryHeap<T> {
 
 	private T[] nodes;
 	private int count = 0;
 	private Comparator<T> cmp;
+
+	public static <T> void sort(T[] xs, Comparator<T> cp) {
+		BinaryHeap<T> bh = new BinaryHeap<>(xs.length, cp);
+		for (int i = 0; i < xs.length; i++) {
+			bh.add(xs[i]);
+		}
+		for (int i = xs.length - 1; i >= 0; i--) {
+			xs[i] = bh.removeMax();
+		}
+	}
 
 	public BinaryHeap(int capacity, Comparator<T> cmp) {
 		this.nodes = (T[]) new Object[capacity + 1];
@@ -27,6 +38,10 @@ public class BinaryHeap<T> {
 		return count;
 	}
 
+	public String toString() {
+		return Arrays.toString(nodes);
+	}
+
 	private void swim(int k) {
 		while (k > 1 && less(k / 2, k)) {
 			swap(k, k / 2);
@@ -35,10 +50,13 @@ public class BinaryHeap<T> {
 	}
 
 	private void sink(int k) {
-		while (2 * k < (count - 1) && (less(k, 2 * k) || less(k, 2 * k + 1))) {
-			int c = less(2 * k, 2 * k + 1) ? 2 * k + 1 : 2 * k;
-			swap(k, c);
-			k = c;
+		while (2 * k <= count) {
+			int j = 2 * k;
+			if (j < count && less(j, j + 1))
+				j++;
+			if (less(k, j))
+				swap(k, j);
+			k = j;
 		}
 	}
 
