@@ -59,8 +59,7 @@ public class PointSET {
 	 */
 	public Iterable<Point2D> range(RectHV rect) {
 		validateNotNull(rect);
-		var sm = points.stream().filter(p -> rect.contains(p));
-		return (Iterable<Point2D>) () -> sm.iterator();
+		return points.stream().filter(p -> rect.contains(p)).toList();
 	}
 
 	/**
@@ -71,15 +70,13 @@ public class PointSET {
 		if (isEmpty())
 			return null;
 
-		Iterator<Point2D> itr = points.iterator();
-		Point2D result = itr.next();
-		double distance = Double.MAX_VALUE;
-		while (itr.hasNext()) {
-			Point2D p = itr.next();
-			double d = point.distanceTo(p);
-			if (d < distance) {
-				distance = d;
+		double min = Double.MAX_VALUE;
+		Point2D result = null;
+		for (Point2D p : points) {
+			double distance = p.distanceTo(point);
+			if (distance < min) {
 				result = p;
+				min = distance;
 			}
 		}
 		return result;

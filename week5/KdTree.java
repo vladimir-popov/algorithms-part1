@@ -1,18 +1,9 @@
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.StdDraw;
+import java.util.TreeSet;
 
 public class KdTree {
-
-	private static class InsertResult {
-		Node node;
-		boolean isInserted;
-
-		InsertResult(Node node, boolean isInserted) {
-			this.node = node;
-			this.isInserted = isInserted;
-		}
-	}
 
 	private static class Node {
 		Point2D value;
@@ -31,34 +22,24 @@ public class KdTree {
 			return ((isVertical) ? "VERT " : "HOR ") + value;
 		}
 
-		static InsertResult insert(Node self, Node n) {
+		static Node insert(Node self, Node n) {
 			validateNotNull(n);
 
 			if (self == null)
-				return new InsertResult(n, true);
+				return n;
 
 			if (self.value.equals(n.value))
-				return new InsertResult(self, false);
+				return n;
 
 			n.parent = self;
 			n.isVertical = !self.isVertical;
-			InsertResult result;
-			boolean isBigger = (self.isVertical) ? (self.value.x() < n.value.x()) : (self.value.y() < n.value.y());
-			if (isBigger) {
-				result = Node.insert(self.rightOrTop, n);
+			Node result;
+			if (isBigger(self, n.value)) {
+				self.rightOrTop = Node.insert(self.rightOrTop, n);
 			} else {
-				result = Node.insert(self.leftOrBottom, n);
+				self.leftOrBottom = Node.insert(self.leftOrBottom, n);
 			}
-
-			if (result.isInserted == false)
-				return result;
-
-			if (isBigger)
-				self.rightOrTop = result.node;
-			else
-				self.leftOrBottom = result.node;
-
-			return new InsertResult(self, true);
+			return self;
 		}
 
 		static boolean contains(Node n, Point2D p) {
@@ -68,8 +49,7 @@ public class KdTree {
 			if (n.value.equals(p)) {
 				return true;
 			}
-			boolean isBigger = (n.isVertical) ? p.x() > n.value.x() : p.y() > n.value.y();
-			if (isBigger) {
+			if (isBigger(n, p)) {
 				return Node.contains(n.rightOrTop, p);
 			} else {
 				return Node.contains(n.leftOrBottom, p);
@@ -97,8 +77,33 @@ public class KdTree {
 			return (x.distanceTo(p) < y.distanceTo(p)) ? x : y;
 		}
 
-		static Iterable<Point2D> range(Node n, RectHV rect) {
-			return null;
+		static Iterable<Point2D> range(Node n, RectHV rect, TreeSet<Point2D> accum) {
+			if (n == null)
+				return accum;
+
+			if (rect.contains(n.value)) {
+				accum.add(n.value);
+			}
+			if (isLesssOrEqual(n, rect.xmin(), rect.ymin())) {
+				Node.range(n.leftOrBottom, rect, accum);
+			}
+			if (isBiggerOrEqual(n, rect.xmax(), rect.ymax())) {
+				Node.range(n.rightOrTop, rect, accum);
+			}
+			return accum;
+		}
+
+		/** @return true if the point is right or up to the node */
+		private static boolean isBigger(Node n, Point2D p) {
+			return (n.isVertical) ? p.x() > n.value.x() : p.y() > n.value.y();
+		}
+
+		private static boolean isBiggerOrEqual(Node n, double x, double y) {
+			return (n.isVertical) ? x >= n.value.x() : y >= n.value.y();
+		}
+
+		private static boolean isLesssOrEqual(Node n, double x, double y) {
+			return (n.isVertical) ? x <= n.value.x() : y <= n.value.y();
 		}
 
 		static void draw(Node n, int depth, String side) {
@@ -163,11 +168,11 @@ public class KdTree {
 	 */
 	public void insert(Point2D p) {
 		validateNotNull(p);
-		InsertResult result = Node.insert(this.root, new Node(p));
-		if (result.isInserted) {
-			this.root = result.node;
-			this.count++;
-		}
+		if (contains(p))
+			return;
+
+		this.root = Node.insert(this.root, new Node(p));
+		this.count++;
 	}
 
 	/**
@@ -190,7 +195,8 @@ public class KdTree {
 	 */
 	public Iterable<Point2D> range(RectHV rect) {
 		validateNotNull(rect);
-		return null;
+		TreeSet<Point2D> accum = new TreeSet();
+		return Node.range(root, rect, accum);
 	}
 
 	/**
