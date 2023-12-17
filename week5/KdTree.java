@@ -206,16 +206,4 @@ public class KdTree {
 		validateNotNull(p);
 		return Node.nearest(root, p);
 	}
-
-	public static void main(String[] args) throws Exception {
-		StdDraw.setPenRadius(0.01);
-		var points = new KdTree();
-		points.insert(new Point2D(0.7, 0.2));
-		points.insert(new Point2D(0.5, 0.4));
-		points.insert(new Point2D(0.2, 0.3));
-		points.insert(new Point2D(0.4, 0.7));
-		points.insert(new Point2D(0.9, 0.6));
-		points.draw();
-		System.in.read();
-	}
 }
