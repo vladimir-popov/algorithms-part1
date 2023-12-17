@@ -3,6 +3,7 @@ import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.StdDraw;
 import java.util.Iterator;
 import java.util.TreeSet;
+import java.util.LinkedList;
 
 public class PointSET {
 
@@ -59,7 +60,12 @@ public class PointSET {
 	 */
 	public Iterable<Point2D> range(RectHV rect) {
 		validateNotNull(rect);
-		return points.stream().filter(p -> rect.contains(p)).toList();
+		LinkedList<Point2D> result = new LinkedList<>();
+		for (Point2D p : points) {
+			if (rect.contains(p))
+				result.add(p);
+		}
+		return result;
 	}
 
 	/**

@@ -1,7 +1,7 @@
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.StdDraw;
-import java.util.TreeSet;
+import java.util.LinkedList;
 
 public class KdTree {
 
@@ -77,7 +77,7 @@ public class KdTree {
 			return (x.distanceTo(p) < y.distanceTo(p)) ? x : y;
 		}
 
-		static Iterable<Point2D> range(Node n, RectHV rect, TreeSet<Point2D> accum) {
+		static Iterable<Point2D> range(Node n, RectHV rect, LinkedList<Point2D> accum) {
 			if (n == null)
 				return accum;
 
@@ -195,7 +195,7 @@ public class KdTree {
 	 */
 	public Iterable<Point2D> range(RectHV rect) {
 		validateNotNull(rect);
-		TreeSet<Point2D> accum = new TreeSet();
+		LinkedList<Point2D> accum = new LinkedList<Point2D>();
 		return Node.range(root, rect, accum);
 	}
 
